@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}}</title>
+    <style>
+        *{padding: 0px;margin: 0px}
+        li{list-style: none}
+        body{
+            background: #ddd;
+        }
+        .main{
+            width: 80%;
+            background: #fff;
+            border: 1px solid #ffffff;
+            border-radius: 10px;
+            margin: 0 auto;
+            padding: 50px 0px;
+        }
+        .content{
+            margin: 20px 0px;
+            padding:20px;
+        }
+        .title{
+            text-align: center;
+            padding: 10px 0px;
+        }
+        pre{
+            background: #ddd;
+            padding: 10px 5px;
+            border-radius: 5px;
+            margin: 10px 0px;
+        }
+        ol{
+            padding: 5px 0px;
+            margin:10px 0px;
+        }
+    </style>
+</head>
+<body>
+<div class="warp">
+<div class="main">
+
+
+<div class="content">
+    <div class="navbar"><a href="/index">Home</a> >> <a href="/article/{{.Data.Id}}.html">{{.Data.Title}}</a></div>
+    <h1 class="title">{{.Data.Title}}</h1>
+    <ul>
+        {{.Data.Content}}
+    </ul>
+</div>
+</div>
+</div>
+</body>
+</html>

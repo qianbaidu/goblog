@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Name}}</title>
+    <style>
+        *{padding: 0px;margin: 0px}
+        li{list-style: none}
+        body{
+            background: #ddd;
+        }
+        .main{
+            width: 80%;
+            background: #fff;
+            border: 1px solid #ffffff;
+            border-radius: 10px;
+            margin: 0 auto;
+            padding: 50px 0px;
+        }
+        li{
+            border-bottom:1px dashed #ddd;
+            height:30px;
+            line-height: 30px;
+        }
+        .content{
+            margin: 20px 0px;
+            padding:20px;
+        }
+        .page{
+            width: 100%;
+            height:50px ;
+            line-height: 50px;
+
+        }
+        .page-li{
+            float: left;
+            border: none;
+            margin: 20px 10px;
+            padding:5px;
+        }
+    </style>
+</head>
+<body>
+<div class="warp">
+<div class="main">
+
+
+<div class="content">
+    <h1>文章列表</h1>
+    <ul>
+
+        {{range .Data}}
+        <li>
+            <a href="./article/{{.Id}}.html" >{{.Title}}</a>
+        </li>
+        {{end}}
+    </ul>
+    <div class="page">
+        <ul>
+            <li class="page-li"><a href="./index">首页</a></li>
+
+            {{if gt .LastPage  0}}
+            <li class="page-li"><a href="./index?page={{.LastPage}}">上一页</a></li>
+            {{end}}
+            {{if gt  .NextPage .Page}}
+            <li class="page-li"><a href="./index?page={{.NextPage}}">下一页</a></li>
+            {{end}}
+          </ul>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>
