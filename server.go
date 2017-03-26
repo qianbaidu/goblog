@@ -205,7 +205,7 @@ func Home(w http.ResponseWriter, r *http.Request)  {
 	} else {
 		lastPage = lastPage -1
 	}
-
+	fmt.Println(page,nextPage);
 	assignData := assignData{list, webSiteName, page, nextPage, lastPage}
 
 	t,_ := template.ParseFiles("index.html")
