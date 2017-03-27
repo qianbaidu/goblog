@@ -54,9 +54,10 @@ func DbConnect() (db *sql.DB) {
 	return db
 }
 
-func queryHomeList(db *sql.DB,sql string) (list [LIMIT]homeList, err error)  {
+func queryHomeList(sql string) (list [LIMIT]homeList, err error)  {
+
 	res, err := db.Query(sql)
-	defer db.Close()
+	defer res.Close()
 
 	if err != nil {
 		log.Println(err)
@@ -81,9 +82,9 @@ func queryHomeList(db *sql.DB,sql string) (list [LIMIT]homeList, err error)  {
 
 	return list,err
 }
-func queryArticle(db *sql.DB,sql string) (data articleData, err error)  {
+func queryArticle(sql string) (data articleData, err error)  {
 	res, err := db.Query(sql)
-	defer db.Close()
+	defer res.Close()
 
 	if err != nil {
 		log.Println(err)
@@ -127,7 +128,7 @@ func Article(w http.ResponseWriter, request *http.Request)  {
 		}
 	}
 
-	fmt.Println("out =>",aid)
+
 	//request.ParseForm()
 	//id := request.Form.Get("id")
 	//aid, err := strconv.Atoi(id)
@@ -143,10 +144,10 @@ func Article(w http.ResponseWriter, request *http.Request)  {
 }
 
 func renderArticle(aid int ,w http.ResponseWriter)  {
-	db = DbConnect()
-	defer db.Close()
+	//db = DbConnect()
+	//defer db.Close()
 	sql := fmt.Sprintf("select post_title as title,ID as id ,post_content as content from duosutewp_posts where id = %d",aid);
-	data, err := queryArticle(db,sql)
+	data, err := queryArticle(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -181,15 +182,15 @@ func getPage(request *http.Request)  (page int){
 }
 func Home(w http.ResponseWriter, r *http.Request)  {
 
-	db = DbConnect()
-	defer db.Close()
+	//db = DbConnect()
+	//defer db.Close()
 
 	page := getPage(r)
 
 	startNum := page * LIMIT;
 
 	sql := fmt.Sprintf("select post_title as title,ID as id from duosutewp_posts order by id desc limit %d,%d ",startNum,LIMIT);
-	list, err := queryHomeList(db,sql)
+	list, err := queryHomeList(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -205,12 +206,21 @@ func Home(w http.ResponseWriter, r *http.Request)  {
 	} else {
 		lastPage = lastPage -1
 	}
-	fmt.Println(page,nextPage);
+	//fmt.Println(page,nextPage);
 	assignData := assignData{list, webSiteName, page, nextPage, lastPage}
 
 	t,_ := template.ParseFiles("index.html")
 	t.Execute(w, assignData)
 
+}
+
+
+func init() {
+	//初始化数据库链接 建立连接池
+	db, _ = sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/qipajun?charset=utf8")
+	db.SetMaxOpenConns(2)
+	db.SetMaxIdleConns(1)
+	db.Ping()
 }
 
 func main() {
@@ -219,4 +229,6 @@ func main() {
 	if err := http.ListenAndServe(":9090", nil); err != nil {
 		panic(err)
 	}
+
+
 }
